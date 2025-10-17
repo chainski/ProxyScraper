@@ -79,3 +79,4 @@ The scraper fetches proxies from over 30 reliable sources like:
 ## 📜 License
 This project is licensed under the **GNU General Public License v3.0**.
 You may copy, distribute, and modify the software as long as you track changes/dates in source files. All modifications must also be licensed under GPLv3. For full license text, see the [LICENSE](./LICENSE) file or visit: [https://www.gnu.org/licenses/gpl-3.0.html](https://www.gnu.org/licenses/gpl-3.0.html)
+
