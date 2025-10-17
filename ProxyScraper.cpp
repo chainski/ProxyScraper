@@ -134,6 +134,7 @@ void printBanner() {
     )" << RESET << endl;
 }
 int main() {
+    SetConsoleOutputCP(CP_UTF8);
     ansicolours();
     system("mode con: cols=120 lines=50");
     SetConsoleTitleA("Proxy Scraper - Made By: Chainski");
