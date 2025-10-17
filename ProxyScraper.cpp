@@ -25,17 +25,11 @@ using namespace std;
 #define CYAN       "\033[36m"      /* Cyan */
 #define YELLOW     "\033[33m"      /* Yellow */
 
-void enableANSIColors() {
-#ifdef _WIN32
+void ansicolours() {
+    DWORD mode;
     HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
-    if (hOut != INVALID_HANDLE_VALUE) {
-        DWORD dwMode = 0;
-        if (GetConsoleMode(hOut, &dwMode)) {
-            dwMode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
-            SetConsoleMode(hOut, dwMode);
-        }
-    }
-#endif
+    GetConsoleMode(hOut, &mode);
+    SetConsoleMode(hOut, mode | ENABLE_VIRTUAL_TERMINAL_PROCESSING);
 }
 
 void CleanProxyFile(const string& filename) {
@@ -140,8 +134,7 @@ void printBanner() {
     )" << RESET << endl;
 }
 int main() {
-    SetConsoleOutputCP(CP_UTF8);
-    enableANSIColors();
+    ansicolours();
     system("mode con: cols=120 lines=50");
     SetConsoleTitleA("Proxy Scraper - Made By: Chainski");
     printBanner(); 
