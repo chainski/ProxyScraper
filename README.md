@@ -18,7 +18,6 @@ A high-performance multithreaded proxy scraper for Windows that fetches fresh HT
 
 *NOTE: This library isn't designed for production use. It's advised to use your own proxies or purchase a service which provides an API. These are merely free ones that are retrieved from sites and should only be used for development or testing purposes.*
 
-
 ## 📌 Features
 
 - [x] Scrapes HTTP/S, SOCKS4, and SOCKS5 proxies
@@ -26,8 +25,6 @@ A high-performance multithreaded proxy scraper for Windows that fetches fresh HT
 - [x] Saves each proxy type to a separate `.txt` file
 - [x] Displays colorful console banners and messages (ANSI)
 - [x] Uses Windows WinHTTP API (native, no third-party deps)
-
-
 
 ## 🚀 Getting Started
 
@@ -73,10 +70,8 @@ The scraper fetches proxies from over 30 reliable sources like:
 - and more...
 
 ## 👨‍💻 Author
-
 **Chainski** [GitHub](https://github.com/Chainski)
 
 ## 📜 License
 This project is licensed under the **GNU General Public License v3.0**.
 You may copy, distribute, and modify the software as long as you track changes/dates in source files. All modifications must also be licensed under GPLv3. For full license text, see the [LICENSE](./LICENSE) file or visit: [https://www.gnu.org/licenses/gpl-3.0.html](https://www.gnu.org/licenses/gpl-3.0.html)
-
