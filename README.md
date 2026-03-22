@@ -20,7 +20,7 @@ A high-performance multithreaded proxy scraper for Windows that fetches fresh HT
 
 ## 📌 Features
 
-- [x] Scrapes `HTTP/S`, `SOCKS4`, and `SOCKS5` proxies
+- [x] Scrapes `HTTP/S`, `SOCKS4` and `SOCKS5` proxies
 - [x] Uses multithreading for fast downloads
 - [x] Saves each proxy type to a separate `.txt` file
 - [x] Displays colorful console banners and messages (ANSI)
