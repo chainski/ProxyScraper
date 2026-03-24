@@ -31,7 +31,7 @@ A high-performance multithreaded proxy scraper for Windows that fetches fresh HT
 ### ⚙️ Requirements
 
 - Windows OS
-- C++ Compiler preferably [MinGW](https://github.com/brechtsanders/winlibs_mingw)
+- C++ Compiler preferably [MinGW](https://github.com/brechtsanders/winlibs_mingw/releases)
 
 ### 🛠️ Build Instructions
 
