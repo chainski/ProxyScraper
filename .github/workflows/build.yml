@@ -4,15 +4,9 @@ on:
   push:
     branches:
       - main
-  pull_request:
-    branches:
-      - main
-    types: [closed]
 
 permissions:
   contents: write
-  pull-requests: write
-  repository-projects: write
 
 jobs:
   build:
@@ -20,15 +14,10 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
-      - name: Install 7zip
-        run: choco install 7zip -y
-        shell: cmd
-        
       - name: Download MinGW
         run: |
           $ProgressPreference = 'SilentlyContinue'
-          Invoke-WebRequest -Uri https://github.com/brechtsanders/winlibs_mingw/releases/download/15.1.0posix-13.0.0-msvcrt-r3/winlibs-x86_64-posix-seh-gcc-15.1.0-mingw-w64msvcrt-13.0.0-r3.7z -OutFile mingw.7z
+          Invoke-WebRequest -Uri https://github.com/brechtsanders/winlibs_mingw/releases/download/16.2.0posix-23.1.3-14.0.0-ucrt-r3/winlibs-x86_64-posix-seh-gcc-16.2.0-mingw-w64ucrt-14.0.0-r3.7z -OutFile mingw.7z
         shell: powershell
 
       - name: Extract MinGW
@@ -36,50 +25,55 @@ jobs:
         shell: cmd
 
       - name: Set up environment
-        run: |
-          echo "C:\mingw\bin" >> $env:GITHUB_PATH
+        run: echo "C:\mingw\bin" >> $env:GITHUB_PATH
         shell: powershell
 
-      - name: Verify GCC
-        run: |
-          gcc --version
-        shell: cmd
-
-      - name: Compile resource file
+      - name: Compile resource file (GCC)
         run: windres assets\ProxyScraper.rc -O coff -o assets\ProxyScraper.o
         shell: cmd
 
-      - name: Build project
-        run: g++ ProxyScraper.cpp assets\ProxyScraper.o -w -O2 -static -lpsapi -lwinhttp -lws2_32 -fexceptions -Wl,--gc-sections -pipe -s -o ProxyScraper.exe
+      - name: Build with GCC
+        run: g++ -std=c++17 ProxyScraper.cpp assets\ProxyScraper.o -w -O2 -static -lwinhttp -fexceptions -Wl,--gc-sections -pipe -s -o proxyscraper-v2.0-x86_64-gcc.exe
         shell: cmd
 
-      - name: List build directory
+      # MSVC build 
+      - name: Setup MSVC toolchain
+        uses: ilammy/msvc-dev-cmd@v1
+
+      - name: Compile resource file (MSVC)
+        run: rc.exe /nologo /fo assets\ProxyScraper.res assets\ProxyScraper.rc
         shell: cmd
-        run: dir
 
-      - name: Delete existing tag and release
-        uses: dev-drprasad/delete-tag-and-release@v1.1
-        with:
-          tag_name: ProxyScraper
-          delete_release: true
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build with MSVC (stripped, static CRT)
+        run: cl.exe /nologo /std:c++17 /EHsc /MT /O2 ProxyScraper.cpp assets\ProxyScraper.res /link winhttp.lib /RELEASE /OPT:REF /OPT:ICF /INCREMENTAL:NO /NOCOFFGRPINFO /EMITTOOLVERSIONINFO:NO /OUT:proxyscraper-v2.0-x86_64-msvc.exe
+        shell: cmd
 
+      # Release 
       - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: softprops/action-gh-release@v2
         with:
           tag_name: ProxyScraper
-          release_name: ProxyScraper
-          body: "Release created by GitHub Actions"
-
-      - name: Upload Release Asset
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ProxyScraper.exe
-          asset_name: ProxyScraper.exe
-          asset_content_type: application/octet-stream
+          name: ProxyScraper v2.0
+          generate_release_notes: true
+          body: |
+            ## Changelog - v2.0
+            - [x] Added 72 actively-maintained proxy sources (up from 34) - ProxyScrape v4 API, GeoNode API, proxyspace.pro, spys.me, iplocate, Tianndev, hproxy-com, dpangestuw, xyzs996, VMHeaven, hideip.me, litportnet, ProxyGenerator, stormsia, VPSLab, ALIILAPRO, proxmint
+            - [x] Added JSON response extraction (`{"ip": ..., "port": ...}`) alongside plain-text lists
+            - [x] Added per-source live progress lines with proxy counts and fetch latency
+            - [x] Added end-of-run stats: scraped / duplicates / invalid removed per protocol
+            - [x] Added real Windows browser fingerprint: Chrome UA from microlinkhq/top-user-agents + browser request headers
+            - [x] Added MSVC x86_64 release binary alongside GCC (both fully static, zero dependencies)
+            - [x] Updated threading to a 32-thread worker pool (was 4 sequential) - full scrape in ~1-2 seconds
+            - [x] Updated requests with per-request connect/send/receive timeouts (8s/10s/15s)
+            - [x] Updated validation: octet range 0-255, port 1-65535, reserved ranges rejected
+            - [x] Updated output handling: full in-memory deduplication, sorted rewrite on every run
+            - [x] Updated console buffer to 9001 lines (scrollback restored - no more 50-line cap)
+            - [x] Updated status markers to ASCII-only ([+], [!], [*]) for Windows 10 font compatibility
+            - [x] Updated error handling: file-write checks, worker exception guards, no empty-file overwrites
+            - [x] Removed dead/stale sources: jetkai (3.5y), ShiftyTR (3.2y), rdavydov (3.7y), proxy4parsing (2.5y)
+            - [x] Removed duplicate mirror sources (ProxyScraper/ProxyScraper, byte-identical to TheSpeedX)
+            - [x] Removed unused library links: psapi, ws2_32
+          files: |
+            proxyscraper-v2.0-x86_64-gcc.exe
+            proxyscraper-v2.0-x86_64-msvc.exe
+            

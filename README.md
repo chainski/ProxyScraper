@@ -21,9 +21,15 @@ A high-performance multithreaded proxy scraper for Windows that fetches fresh HT
 ## 📌 Features
 
 - [x] Scrapes `HTTP/S`, `SOCKS4` and `SOCKS5` proxies
-- [x] Uses multithreading for fast downloads
-- [x] Saves each proxy type to a separate `.txt` file
-- [x] Displays colorful console banners and messages (ANSI)
+- [x] 60+ actively maintained sources (every source verified `200 OK` and updated within the last 24 hours)
+- [x] Worker-pool multithreading (32 threads) — typically finishes in ~2-5 seconds
+- [x] Real browser fingerprint: top Windows User-Agent from [microlinkhq/top-user-agents](https://github.com/microlinkhq/top-user-agents) + browser request headers
+- [x] Per-source live progress with proxy counts and fetch latency
+- [x] Plain-text **and** JSON (`{"ip":..,"port":..}`) proxy extraction
+- [x] Strict validation: IPv4 octets `0-255`, ports `1-65535`, loopback/reserved ranges dropped
+- [x] Full deduplication — output files contain unique `IP:PORT` entries only, sorted alphabetically
+- [x] Output files are rewritten fresh on every run (no accumulation)
+- [x] Colorful console banners and messages (ANSI) with end-of-run statistics
 - [x] Uses Windows WinHTTP API (native, no third-party deps)
 
 ## 🚀 Getting Started
@@ -31,7 +37,9 @@ A high-performance multithreaded proxy scraper for Windows that fetches fresh HT
 ### ⚙️ Requirements
 
 - Windows OS
-- C++ Compiler preferably [MinGW](https://github.com/brechtsanders/winlibs_mingw/releases)
+- C++ Compiler — either of:
+  - [MinGW](https://github.com/brechtsanders/winlibs_mingw/releases) (GCC build via `build.cmd`)
+  - Portable MSVC [PortableBuildTools](https://github.com/Data-Oriented-House/PortableBuildTools) (MSVC build via `build-msvc.cmd`), with `msvc.bat` available on `PATH`
 
 ### 🛠️ Build Instructions
 
@@ -42,11 +50,11 @@ git clone https://github.com/Chainski/ProxyScraper
 cd ProxyScraper
 ```
 
-2. Compile using MinGW:
+2. Compile using MinGW (or just run `build.cmd`):
 
 ```bash
 windres assets\ProxyScraper.rc -O coff -o assets\ProxyScraper.o
-g++ ProxyScraper.cpp assets\ProxyScraper.o -w -O2 -static -lpsapi -lwinhttp -lws2_32 -fexceptions -Wl,--gc-sections -pipe -s -o ProxyScraper.exe
+g++ -std=c++17 ProxyScraper.cpp assets\ProxyScraper.o -w -O2 -static -lwinhttp -fexceptions -Wl,--gc-sections -pipe -s -o ProxyScraper.exe
 ```
 
 3. Run the executable:
@@ -54,20 +62,33 @@ g++ ProxyScraper.cpp assets\ProxyScraper.o -w -O2 -static -lpsapi -lwinhttp -lws
 ```bash
 ProxyScraper.exe
 ```
-	
+
+Alternatively, `build-msvc.cmd` builds with the portable MSVC toolchain from [PortableBuildTools](https://github.com/Data-Oriented-House/PortableBuildTools). It expects the PortableBuildTools environment script (`msvc.bat`) to be on `PATH`.
+
 ## 📁 Output
 
 - `http.txt` — All scraped HTTP/HTTPS proxies
 - `socks4.txt` — All scraped SOCKS4 proxies
 - `socks5.txt` — All scraped SOCKS5 proxies
-Files are appended each run with fresh results.
+
+Files are rewritten on each run with fresh, validated and deduplicated results.
 
 ## 🔗 Proxy Sources
-The scraper fetches proxies from over 30 reliable sources like:
-- [ProxyScrape](https://proxyscrape.com)
-- [JetKai](https://github.com/jetkai/proxy-list)
+The scraper fetches proxies from over 60 actively maintained sources like:
+- [ProxyScrape (v2 + v4 API)](https://proxyscrape.com)
+- [OpenProxyList](https://openproxylist.xyz)
+- [GeoNode API](https://proxylist.geonode.com)
+- [ProxySpace](https://proxyspace.pro)
 - [TheSpeedX](https://github.com/TheSpeedX/PROXY-List)
-- and more...
+- [mmpx12](https://github.com/mmpx12/proxy-list)
+- [monosans](https://github.com/monosans/proxy-list)
+- [roosterkid](https://github.com/roosterkid/openproxylist)
+- [iplocate](https://github.com/iplocate/free-proxy-list)
+- [Tianndev](https://github.com/Tianndev/free-proxy)
+- [dpangestuw](https://github.com/dpangestuw/Free-Proxy)
+- [zloi-user/hideip.me](https://github.com/zloi-user/hideip.me)
+- [VMHeaven](https://github.com/vmheaven/VMHeaven.io-Free-Proxy-List)
+- and many more...
 
 ## 👨‍💻 Author
 **Chainski** [GitHub](https://github.com/Chainski)
