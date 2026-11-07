@@ -77,7 +77,7 @@ Files are rewritten on each run with fresh, validated and deduplicated results.
 The scraper fetches proxies from over 60 actively maintained sources like:
 - [ProxyScrape (v2 + v4 API)](https://proxyscrape.com)
 - [OpenProxyList](https://openproxylist.xyz)
-- [GeoNode API](https://proxylist.geonode.com)
+- [GeoNode API](https://https://geonode.com/free-proxy-list)
 - [ProxySpace](https://proxyspace.pro)
 - [TheSpeedX](https://github.com/TheSpeedX/PROXY-List)
 - [mmpx12](https://github.com/mmpx12/proxy-list)
