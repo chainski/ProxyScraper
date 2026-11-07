@@ -50,7 +50,7 @@ jobs:
         shell: cmd
 
       # Release 
-      - name: Delete existing release (continue if none)
+      - name: Delete existing release 
         shell: cmd
         continue-on-error: true
         env:
