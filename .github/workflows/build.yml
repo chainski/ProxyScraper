@@ -62,11 +62,11 @@ jobs:
         with:
           tag_name: ProxyScraper
           name: ProxyScraper v2.0
-          generate_release_notes: true
+          generate_release_notes: false
           body: |
             ## Changelog - v2.0
             - [x] Added 72 actively-maintained proxy sources (up from 34) - ProxyScrape v4 API, GeoNode API, proxyspace.pro, spys.me, iplocate, Tianndev, hproxy-com, dpangestuw, xyzs996, VMHeaven, hideip.me, litportnet, ProxyGenerator, stormsia, VPSLab, ALIILAPRO, proxmint
-            - [x] Added JSON response extraction (`{"ip": ..., "port": ...}`) alongside plain-text lists
+            - [x] Added JSON response extraction (`{"ip:port}`) alongside plain-text lists
             - [x] Added per-source live progress lines with proxy counts and fetch latency
             - [x] Added end-of-run stats: scraped / duplicates / invalid removed per protocol
             - [x] Added real Windows browser fingerprint: Chrome UA from microlinkhq/top-user-agents + browser request headers
@@ -75,8 +75,6 @@ jobs:
             - [x] Updated requests with per-request connect/send/receive timeouts (8s/10s/15s)
             - [x] Updated validation: octet range 0-255, port 1-65535, reserved ranges rejected
             - [x] Updated output handling: full in-memory deduplication, sorted rewrite on every run
-            - [x] Updated console buffer to 9001 lines (scrollback restored - no more 50-line cap)
-            - [x] Updated status markers to ASCII-only ([+], [!], [*]) for Windows 10 font compatibility
             - [x] Updated error handling: file-write checks, worker exception guards, no empty-file overwrites
             - [x] Removed dead/stale sources: jetkai (3.5y), ShiftyTR (3.2y), rdavydov (3.7y), proxy4parsing (2.5y)
             - [x] Removed duplicate mirror sources (ProxyScraper/ProxyScraper, byte-identical to TheSpeedX)
