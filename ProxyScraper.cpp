@@ -419,11 +419,15 @@ int main() {
     } catch (...) {
         std::cout << clr::RED << "[!] Unexpected fatal error during scraping." << clr::RESET << std::endl;
     }
-    const auto secs = std::chrono::duration_cast<std::chrono::seconds>(
-        std::chrono::steady_clock::now() - t0).count();
+    const auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(
+    std::chrono::steady_clock::now() - t0).count();
+    const auto secs = elapsed / 1000;
+    const auto ms   = elapsed % 1000;
     if (grandTotal > 0)
-        std::cout << clr::YELLOW << "[*] Done! " << grandTotal << " proxies scraped in "
-                  << secs << " seconds, If you like the project consider leaving a star." << clr::RESET << std::endl;
+    std::cout << clr::YELLOW << "[*] Done! " << grandTotal << " proxies scraped in "
+              << secs << " seconds, " << ms << " ms. "
+              << "If you like the project consider leaving a star."
+              << clr::RESET << std::endl;
     WinHttpCloseHandle(g_session);
     std::cout << clr::GREEN << "Press any key to continue . . ." << clr::RESET;
     std::cin.get();
