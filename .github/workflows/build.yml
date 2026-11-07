@@ -14,6 +14,7 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        
       - name: Download MinGW
         run: |
           $ProgressPreference = 'SilentlyContinue'
@@ -49,6 +50,13 @@ jobs:
         shell: cmd
 
       # Release 
+      - name: Delete existing release (continue if none)
+        shell: cmd
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh release delete ProxyScraper --repo ${{ github.repository }} --cleanup-tag --yes
+
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
@@ -76,4 +84,3 @@ jobs:
           files: |
             proxyscraper-v2.0-x86_64-gcc.exe
             proxyscraper-v2.0-x86_64-msvc.exe
-            
