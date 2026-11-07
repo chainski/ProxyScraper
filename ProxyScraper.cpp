@@ -33,8 +33,7 @@
 
 namespace cfg {
     // Windows UA from https://github.com/microlinkhq/top-user-agents
-    constexpr wchar_t kUserAgent[] =
-        L"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36";
+    constexpr wchar_t kUserAgent[] = L"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36";
     constexpr wchar_t kHeaders[] =
         L"Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8\r\n"
         L"Accept-Language: en-US,en;q=0.9\r\n"
