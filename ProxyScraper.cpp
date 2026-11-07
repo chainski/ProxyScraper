@@ -188,7 +188,7 @@ static const std::vector<Source> kSources = [] {
 }();
 
 constexpr const char* kProtoName[3]  = {"HTTP/S", "SOCKS4", "SOCKS5"};
-constexpr const char* kProtoTag[3]   = {"HTTP  ", "SOCKS4", "SOCKS5"};
+constexpr const char* kProtoTag[3]   = {"HTTP", "SOCKS4", "SOCKS5"};
 constexpr const char* kProtoFile[3]  = {"http.txt", "socks4.txt", "socks5.txt"};
 
 // Scraper core
