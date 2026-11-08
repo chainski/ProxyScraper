@@ -99,4 +99,4 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "Full report committed to STATUS.md" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "Schedule: every 4 hours (edit cron in status.yml to change)" >> $GITHUB_STEP_SUMMARY
+          echo "Schedule: every 4 hours" >> $GITHUB_STEP_SUMMARY
