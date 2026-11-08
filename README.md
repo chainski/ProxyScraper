@@ -1,10 +1,10 @@
 <p align= "center">
-   <img src="https://img.shields.io/github/stars/Chainski/ProxyScraper?style=flat&color=%230047ab">
-   <img src="https://img.shields.io/github/forks/Chainski/ProxyScraper?style=flat&color=%230047ab">
-   <img src="https://hits.sh/github.com/Chainski/ProxyScraper.svg?label=views&color=0047ab">
+   <img src="https://img.shields.io/github/stars/Chainski/ProxyScraper?style=flat&color=336E9E">
+   <img src="https://img.shields.io/github/forks/Chainski/ProxyScraper?style=flat&color=336E9E">
+   <img src="https://hits.sh/github.com/Chainski/ProxyScraper.svg?label=views&color=336E9E">
    <br>
-   <img src="https://img.shields.io/github/last-commit/Chainski/ProxyScraper?style=flat&color=%230047ab">
-   <img src="https://img.shields.io/github/license/Chainski/ProxyScraper?style=flat&color=%230047ab">
+   <img src="https://img.shields.io/github/last-commit/Chainski/ProxyScraper?style=flat&color=336E9E">
+   <img src="https://img.shields.io/github/license/Chainski/ProxyScraper?style=flat&color=336E9E">
    <br>
 </p>
 
