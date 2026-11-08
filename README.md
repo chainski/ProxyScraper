@@ -1,7 +1,5 @@
 <p align="center">
    <img src="https://img.shields.io/github/actions/workflow/status/Chainski/ProxyScraper/build.yml?style=for-the-badge&color=brightgreen">
-   <img src="https://img.shields.io/github/stars/Chainski/ProxyScraper?style=for-the-badge&color=336E9E">
-   <img src="https://img.shields.io/github/forks/Chainski/ProxyScraper?style=for-the-badge&color=336E9E">
    <img src="https://img.shields.io/github/repo-size/Chainski/ProxyScraper?style=for-the-badge&color=336E9E">
    <img src="https://hits.sh/github.com/Chainski/ProxyScraper.svg?label=views&color=336E9E&style=for-the-badge">
 </p>
