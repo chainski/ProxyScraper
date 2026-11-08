@@ -65,19 +65,19 @@ jobs:
           generate_release_notes: false
           body: |
             ## Changelog - v2.0
-            - [x] Added 72 actively-maintained proxy sources (up from 34) - ProxyScrape v4 API, GeoNode API, proxyspace.pro, spys.me, iplocate, Tianndev, hproxy-com, dpangestuw, xyzs996, VMHeaven, hideip.me, litportnet, ProxyGenerator, stormsia, VPSLab, ALIILAPRO, proxmint
-            - [x] Added JSON response extraction (`{"ip:port}`) alongside plain-text lists
+            - [x] 100 actively-maintained proxy sources.
+            - [x] Pre-flight source check: all 100 sources probed in parallel before scraping.
+            - [x] Added JSON response extraction (`{"ip:port}`) alongside plain-text lists (handles GeoNode API)
             - [x] Added per-source live progress lines with proxy counts and fetch latency
             - [x] Added end-of-run stats: scraped / duplicates / invalid removed per protocol
             - [x] Added real Windows browser fingerprint: Chrome UA from microlinkhq/top-user-agents + browser request headers
             - [x] Added MSVC x86_64 release binary alongside GCC (both fully static, zero dependencies)
-            - [x] Updated threading to a 32-thread worker pool (was 4 sequential) - full scrape in ~1-2 seconds
+            - [x] Updated threading to a 32-thread worker pool (was 4 sequential)
             - [x] Updated requests with per-request connect/send/receive timeouts (8s/10s/15s)
             - [x] Updated validation: octet range 0-255, port 1-65535, reserved ranges rejected
-            - [x] Updated output handling: full in-memory deduplication, sorted rewrite on every run
+            - [x] Updated output handling: full in-memory dedup on the IP:PORT tuple, sorted rewrite on every run
             - [x] Updated error handling: file-write checks, worker exception guards, no empty-file overwrites
             - [x] Removed dead/stale sources: jetkai (3.5y), ShiftyTR (3.2y), rdavydov (3.7y), proxy4parsing (2.5y)
-            - [x] Removed duplicate mirror sources (ProxyScraper/ProxyScraper, byte-identical to TheSpeedX)
             - [x] Removed unused library links: psapi, ws2_32
           files: |
             proxyscraper-v2.0-x86_64-gcc.exe

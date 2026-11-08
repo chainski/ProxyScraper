@@ -21,13 +21,14 @@ A high-performance multithreaded proxy scraper for Windows that fetches fresh HT
 ## 📌 Features
 
 - [x] Scrapes `HTTP/S`, `SOCKS4` and `SOCKS5` proxies
-- [x] 60+ actively maintained sources (every source verified `200 OK` and updated within the last 24 hours)
+- [x] 100 actively maintained sources, every source verified online `200 OK` and updated within the last 24 hours
 - [x] Worker-pool multithreading (32 threads) — typically finishes in ~2-5 seconds
 - [x] Real browser fingerprint: top Windows User-Agent from [microlinkhq/top-user-agents](https://github.com/microlinkhq/top-user-agents) + browser request headers
 - [x] Per-source live progress with proxy counts and fetch latency
 - [x] Plain-text **and** JSON (`{"ip":..,"port":..}`) proxy extraction
 - [x] Strict validation: IPv4 octets `0-255`, ports `1-65535`, loopback/reserved ranges dropped
-- [x] Full deduplication — output files contain unique `IP:PORT` entries only, sorted alphabetically
+- [x] Full deduplication on the `IP:PORT` tuple per protocol — output files contain unique entries only, sorted alphabetically
+- [x] Pre-flight source check: all sources are probed in parallel before scraping, reporting `[ALL SOURCES ONLINE]` or exactly how many are reachable
 - [x] Output files are rewritten fresh on every run (no accumulation)
 - [x] Colorful console banners and messages (ANSI) with end-of-run statistics
 - [x] Uses Windows WinHTTP API (native, no third-party deps)
@@ -38,7 +39,7 @@ A high-performance multithreaded proxy scraper for Windows that fetches fresh HT
 
 - Windows OS
 - C++ Compiler — either of:
-  - [MinGW](https://github.com/brechtsanders/winlibs_mingw/releases) (GCC build via `build.cmd`)
+  - [MinGW](https://github.com/brechtsanders/winlibs_mingw/releases) (GCC build via `build_gcc.cmd`)
   - Portable MSVC [PortableBuildTools](https://github.com/Data-Oriented-House/PortableBuildTools) (MSVC build via `build-msvc.cmd`), with `msvc.bat` available on `PATH`
 
 ### 🛠️ Build Instructions
@@ -50,17 +51,17 @@ git clone https://github.com/Chainski/ProxyScraper
 cd ProxyScraper
 ```
 
-2. Compile using MinGW (or just run `build.cmd`):
+2. Compile using MinGW (or just run `build_gcc.cmd`):
 
 ```bash
 windres assets\ProxyScraper.rc -O coff -o assets\ProxyScraper.o
-g++ -std=c++17 ProxyScraper.cpp assets\ProxyScraper.o -w -O2 -static -lwinhttp -fexceptions -Wl,--gc-sections -pipe -s -o ProxyScraper.exe
+g++ -std=c++17 ProxyScraper.cpp assets\ProxyScraper.o -w -O2 -static -lwinhttp -fexceptions -Wl,--gc-sections -pipe -s -o proxyscraper-v2.0-x86_64-gcc.exe
 ```
 
 3. Run the executable:
 
 ```bash
-ProxyScraper.exe
+proxyscraper-v2.0-x86_64-gcc.exe
 ```
 
 Alternatively, `build-msvc.cmd` builds with the portable MSVC toolchain from [PortableBuildTools](https://github.com/Data-Oriented-House/PortableBuildTools). It expects the PortableBuildTools environment script (`msvc.bat`) to be on `PATH`.
@@ -73,8 +74,27 @@ Alternatively, `build-msvc.cmd` builds with the portable MSVC toolchain from [Po
 
 Files are rewritten on each run with fresh, validated and deduplicated results.
 
+## ✅ Recommended Proxy Checker
+
+Scraped free proxies die within hours. To find the ones that are actually online, run the output files through **[monosans/proxy-scraper-checker](https://github.com/monosans/proxy-scraper-checker)** (Rust, single Windows binary, thousands of concurrent checks, TUI progress):
+
+- Grab `proxy-scraper-checker-binary-x86_64-pc-windows-msvc.zip` from its [releases](https://github.com/monosans/proxy-scraper-checker/releases/latest)
+- Use the ready-made **[proxy_checker_example/config.toml](proxy_checker_example/config.toml)** — it points at this project's `http.txt` / `socks4.txt` / `socks5.txt` directly (local paths, no conversion needed) and writes working proxies, fastest first, to `online_proxies\proxies\`, plus a JSON report with per-proxy response time and exit IP
+
+### Tuning knobs:
+
+| Setting | Effect |
+| --- | --- |
+| `timeout = 5.0 → 10.0` | Keeps slow-but-alive proxies — without it, working proxies with 5-10s responses are silently dropped |
+| `timeout 5→10 + connect_timeout 3→5` | Measured on ~140K scraped: 0.66% → 1.10% online (1.65× yield), runtime ~2× longer |
+| `connect_timeout = 5.0` | Lets distant working proxies through; also the main runtime driver (`total / concurrency × connect_timeout`) |
+| `max_concurrent_checks = 512-1024` | Sane band. 4096+ collapsed the measured alive rate to ~0.05% vs ~1.7-2.2% at ≤1024 on a sustained run |
+| `check_url` | Prefer plain unmetered endpoints (e.g. `https://checkip.amazonaws.com`). Cloudflare-fronted ones throttle bulk hits and false-fail alive proxies |
+
+Expect ~0.5-2% of a freshly scraped public list to be online, a checker pass is the required second stage before any real use.
+
 ## 🔗 Proxy Sources
-The scraper fetches proxies from over 60 actively maintained sources like:
+The scraper fetches proxies from 100 actively maintained sources like:
 - [ProxyScrape (v2 + v4 API)](https://proxyscrape.com)
 - [OpenProxyList](https://openproxylist.xyz)
 - [GeoNode API](https://geonode.com/free-proxy-list)
@@ -88,6 +108,7 @@ The scraper fetches proxies from over 60 actively maintained sources like:
 - [dpangestuw](https://github.com/dpangestuw/Free-Proxy)
 - [zloi-user/hideip.me](https://github.com/zloi-user/hideip.me)
 - [VMHeaven](https://github.com/vmheaven/VMHeaven.io-Free-Proxy-List)
+- [ProxyScraper/ProxyScraper](https://github.com/ProxyScraper/ProxyScraper)
 - and many more...
 
 ## 👨‍💻 Author

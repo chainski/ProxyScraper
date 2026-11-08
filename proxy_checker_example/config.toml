@@ -1,0 +1,63 @@
+# Example config.toml for monosans/proxy-scraper-checker
+# (https://github.com/monosans/proxy-scraper-checker)
+#
+# Checks ProxyScraper's output files (http.txt / socks4.txt / socks5.txt) and
+# writes the working proxies, fastest first, to ./online_proxies - plus a JSON
+# report with per-proxy response time and exit IP.
+#
+# Usage: put this file next to proxy-scraper-checker.exe, fix the paths in the
+# three [scraping.*] sections below, then run proxy-scraper-checker.exe
+
+# true = log why every single failed proxy failed. Very verbose; keep false.
+debug = false
+
+[output]
+path = "./online_proxies"
+sort_by_speed = true
+[output.txt]
+enabled = true          # online_proxies\proxies\{all,http,socks4,socks5}.txt
+[output.json]
+enabled = true          # per-proxy response time + exit IP (used for stats)
+include_asn = false            # skip the ~9 MB offline MaxMind download
+include_geolocation = false    # skip the ~50 MB offline MaxMind download
+
+[checking]
+# Plain unmetered AWS endpoint. Avoid Cloudflare-fronted ones (e.g. icanhazip.com):
+# thousands of rapid hits from one IP get throttled and alive proxies false-fail.
+check_url = "https://checkip.amazonaws.com"
+
+# 512-1024 is the stable band. Do NOT push to 4096+: measured alive rate
+# collapses (~0.05% vs ~1.7%) once the local stack saturates.
+max_concurrent_checks = 1024
+
+# Total seconds per check (connect + response). 10.0 keeps slow-but-alive
+# proxies that a 5.0 cap silently drops (measured: +65% more survivors).
+timeout = 10.0
+
+# Seconds allowed to connect. Dead proxies (most of any list) each cost exactly
+# this, so it drives runtime: total / max_concurrent_checks * connect_timeout.
+connect_timeout = 5.0
+
+user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36"
+
+# The four knobs below are required by the checker's parser but only apply to
+# remote (http/https) sources - with the local files underneath they are inert.
+[scraping]
+max_proxies_per_source = 1000000   # a source yielding more is discarded (0 = no limit)
+timeout = 10.0
+connect_timeout = 5.0
+proxy = ""
+user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36"
+
+# The three local files ProxyScraper produces. Point them at your files.
+[scraping.http]
+enabled = true
+urls = ["C:/Users/<username>/Downloads/ProxyScraper/http.txt"]
+
+[scraping.socks4]
+enabled = true
+urls = ["C:/Users/<username>/Downloads/ProxyScraper/socks4.txt"]
+
+[scraping.socks5]
+enabled = true
+urls = ["C:/Users/<username>/Downloads/ProxyScraper/socks5.txt"]
