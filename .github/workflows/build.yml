@@ -64,7 +64,7 @@ jobs:
           name: ProxyScraper v2.0
           generate_release_notes: false
           body: |
-            ## Changelog - v2.0
+            ## Changelog 
             - [x] 100 actively-maintained proxy sources.
             - [x] Pre-flight source check: all 100 sources probed in parallel before scraping.
             - [x] Added JSON response extraction (`{"ip:port}`) alongside plain-text lists (handles GeoNode API)
