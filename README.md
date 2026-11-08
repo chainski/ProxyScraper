@@ -78,14 +78,14 @@ Files are rewritten on each run with fresh, validated and deduplicated results.
 
 Scraped free proxies die within hours. To find the ones that are actually online, run the output files through **[monosans/proxy-scraper-checker](https://github.com/monosans/proxy-scraper-checker)** (Rust, single Windows binary, thousands of concurrent checks, TUI progress):
 
-- Grab `proxy-scraper-checker-binary-x86_64-pc-windows-msvc.zip` from its [releases](https://github.com/monosans/proxy-scraper-checker/releases/latest)
+- Download `proxy-scraper-checker-binary-x86_64-pc-windows-msvc.zip` from its [releases](https://github.com/monosans/proxy-scraper-checker/releases/latest)
 - Use the ready-made **[proxy_checker_example/config.toml](proxy_checker_example/config.toml)** — it points at this project's `http.txt` / `socks4.txt` / `socks5.txt` directly (local paths, no conversion needed) and writes working proxies, fastest first, to `online_proxies\proxies\`, plus a JSON report with per-proxy response time and exit IP
 
 ### Tuning knobs:
 
 | Setting | Effect |
 | --- | --- |
-| `timeout = 5.0 → 10.0` | Keeps slow-but-alive proxies — without it, working proxies with 5-10s responses are silently dropped |
+| `timeout = 5.0 → 10.0` | Keeps slow-but-alive proxies - without it, working proxies with 5-10s responses are silently dropped |
 | `timeout 5→10 + connect_timeout 3→5` | Measured on ~140K scraped: 0.66% → 1.10% online (1.65× yield), runtime ~2× longer |
 | `connect_timeout = 5.0` | Lets distant working proxies through; also the main runtime driver (`total / concurrency × connect_timeout`) |
 | `max_concurrent_checks = 512-1024` | Sane band. 4096+ collapsed the measured alive rate to ~0.05% vs ~1.7-2.2% at ≤1024 on a sustained run |
