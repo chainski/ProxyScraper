@@ -1,11 +1,17 @@
-<p align= "center">
+<p align="center">
    <img src="https://img.shields.io/github/stars/Chainski/ProxyScraper?style=flat&color=336E9E">
    <img src="https://img.shields.io/github/forks/Chainski/ProxyScraper?style=flat&color=336E9E">
-   <img src="https://hits.sh/github.com/Chainski/ProxyScraper.svg?label=views&color=336E9E">
+   <img src="https://img.shields.io/github/issues/Chainski/ProxyScraper?style=flat&color=336E9E">
    <br>
    <img src="https://img.shields.io/github/last-commit/Chainski/ProxyScraper?style=flat&color=336E9E">
+   <img src="https://img.shields.io/github/commit-activity/m/Chainski/ProxyScraper?style=flat&color=336E9E">
+   <img src="https://img.shields.io/github/contributors/Chainski/ProxyScraper?style=flat&color=336E9E">
+   <br>
+   <img src="https://img.shields.io/github/languages/top/Chainski/ProxyScraper?style=flat&color=336E9E">
+   <img src="https://img.shields.io/github/repo-size/Chainski/ProxyScraper?style=flat&color=336E9E">
    <img src="https://img.shields.io/github/license/Chainski/ProxyScraper?style=flat&color=336E9E">
    <br>
+   <img src="https://hits.sh/github.com/Chainski/ProxyScraper.svg?label=views&color=336E9E">
 </p>
 
 <p align="center"> 
