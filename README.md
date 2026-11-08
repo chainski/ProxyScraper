@@ -40,7 +40,7 @@ A high-performance multithreaded proxy scraper for Windows that fetches fresh HT
 - Windows OS
 - C++ Compiler — either of:
   - [MinGW](https://github.com/brechtsanders/winlibs_mingw/releases) (GCC build via `build_gcc.cmd`)
-  - Portable MSVC [PortableBuildTools](https://github.com/Data-Oriented-House/PortableBuildTools) (MSVC build via `build-msvc.cmd`), with `msvc.bat` available on `PATH`
+  - Portable MSVC [PortableBuildTools](https://github.com/Data-Oriented-House/PortableBuildTools) (MSVC build via `build_msvc.cmd`), with `msvc.bat` available on `PATH`
 
 ### 🛠️ Build Instructions
 
@@ -64,7 +64,7 @@ g++ -std=c++17 ProxyScraper.cpp assets\ProxyScraper.o -w -O2 -static -lwinhttp -
 proxyscraper-v2.0-x86_64-gcc.exe
 ```
 
-Alternatively, `build-msvc.cmd` builds with the portable MSVC toolchain from [PortableBuildTools](https://github.com/Data-Oriented-House/PortableBuildTools). It expects the PortableBuildTools environment script (`msvc.bat`) to be on `PATH`.
+Alternatively, `build_msvc.cmd` builds with the portable MSVC toolchain from [PortableBuildTools](https://github.com/Data-Oriented-House/PortableBuildTools). It expects the PortableBuildTools environment script (`msvc.bat`) to be on `PATH`.
 
 ## 📁 Output
 
