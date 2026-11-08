@@ -9,7 +9,7 @@
 </p>
 
 <p align="center"> 
-<img src="https://raw.githubusercontent.com/Chainski/ProxyScraper/refs/heads/main/assets/ProxyScraper.png", width="500", height="500">
+<img src="https://raw.githubusercontent.com/Chainski/ProxyScraper/refs/heads/main/assets/ProxyScraper.gif", width="500", height="500">
 </p>
 
 # 🕵️‍♂️ ProxyScraper
