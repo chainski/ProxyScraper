@@ -49,7 +49,7 @@ connect_timeout = 5.0
 proxy = ""
 user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36"
 
-# The three local files ProxyScraper produces. Point them at your files.
+# The three local files ProxyScraper produces. Point them at your files., or just place them right beside proxy-scraper-checker.exe in same directory eg. > http.txt , socks4.txt , socks5.txt.
 [scraping.http]
 enabled = true
 urls = ["C:/Users/<username>/Downloads/ProxyScraper/http.txt"]

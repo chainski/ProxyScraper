@@ -14,7 +14,7 @@
 
 # 🕵️‍♂️ ProxyScraper
 
-A high-performance multithreaded proxy scraper for Windows that fetches fresh HTTP, SOCKS4, and SOCKS5 proxies from a variety of public sources.
+A high-performance multithreaded proxy scraper for Windows that fetches fresh HTTP, SOCKS4, and SOCKS5 proxies from a variety of active public sources.
 
 *NOTE: This library isn't designed for production use. It's advised to use your own proxies or purchase a service which provides an API. These are merely free ones that are retrieved from sites and should only be used for development or testing purposes.*
 
@@ -68,9 +68,9 @@ Alternatively, `build_msvc.cmd` builds with the portable MSVC toolchain from [Po
 
 ## 📁 Output
 
-- `http.txt` — All scraped HTTP/HTTPS proxies
-- `socks4.txt` — All scraped SOCKS4 proxies
-- `socks5.txt` — All scraped SOCKS5 proxies
+- `http.txt` — All scraped `HTTP/HTTPS` proxies
+- `socks4.txt` — All scraped `SOCKS4` proxies
+- `socks5.txt` — All scraped `SOCKS5` proxies
 
 Files are rewritten on each run with fresh, validated and deduplicated results.
 
