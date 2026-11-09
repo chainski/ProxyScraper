@@ -78,37 +78,35 @@ jobs:
           # Sort alphabetically by URL for stable, readable output
           sort -t'|' -k1,1 status_results.txt > status_sorted.txt
 
-          # Helper: detect protocol from URL (path + query)
+          # Detect protocol from path + query only (scheme is stripped so https:// never interferes)
           detect_protocol() {
             local url="$1"
-            local lower
-            lower=$(echo "$url" | tr '[:upper:]' '[:lower:]')
+            local pathquery
+            pathquery=$(echo "$url" | sed -E 's|^https?://[^/]+||' | tr '[:upper:]' '[:lower:]')
 
-            # Query parameter style: protocol=socks5 or protocols=http,https
-            if echo "$lower" | grep -qE '[?&]protocol(s)?='; then
+            # 1. Query parameter style: protocol=socks5 or protocols=http,https
+            if echo "$pathquery" | grep -qE '[?&]protocol(s)?='; then
               local proto
-              proto=$(echo "$lower" | sed -nE 's/.*[?&]protocol(s)?=([^&]+).*/\2/p' | cut -d',' -f1 | cut -d'%' -f1)
+              proto=$(echo "$pathquery" | sed -nE 's/.*[?&]protocol(s)?=([^&]+).*/\2/p' | cut -d',' -f1 | cut -d'%' -f1)
               case "$proto" in
-                http)  echo "HTTP"; return ;;
-                https) echo "HTTPS"; return ;;
-                socks4) echo "SOCKS4"; return ;;
                 socks5) echo "SOCKS5"; return ;;
+                socks4) echo "SOCKS4"; return ;;
+                https)  echo "HTTPS";  return ;;
+                http)   echo "HTTP";   return ;;
               esac
             fi
 
-            # Path / filename style
-            if echo "$lower" | grep -qE '(^|/)(http|https|socks4|socks5)([^a-z0-9]|$)'; then
-              if echo "$lower" | grep -qE '(^|/)socks5([^a-z0-9]|$)'; then echo "SOCKS5"; return; fi
-              if echo "$lower" | grep -qE '(^|/)socks4([^a-z0-9]|$)'; then echo "SOCKS4"; return; fi
-              if echo "$lower" | grep -qE '(^|/)https([^a-z0-9]|$)'; then echo "HTTPS"; return; fi
-              if echo "$lower" | grep -qE '(^|/)http([^a-z0-9]|$)'; then echo "HTTP"; return; fi
-            fi
+            # 2. Path / filename style (most specific first)
+            if echo "$pathquery" | grep -qE '(^|/)socks5([^a-z0-9]|$)'; then echo "SOCKS5"; return; fi
+            if echo "$pathquery" | grep -qE '(^|/)socks4([^a-z0-9]|$)'; then echo "SOCKS4"; return; fi
+            if echo "$pathquery" | grep -qE '(^|/)https([^a-z0-9]|$)'; then echo "HTTPS";  return; fi
+            if echo "$pathquery" | grep -qE '(^|/)http([^a-z0-9]|$)';  then echo "HTTP";   return; fi
 
-            # Filename contains the word (e.g. http_proxies.txt, HTTPS_RAW.txt, socks5-proxies.txt)
-            if echo "$lower" | grep -qE 'socks5'; then echo "SOCKS5"; return; fi
-            if echo "$lower" | grep -qE 'socks4'; then echo "SOCKS4"; return; fi
-            if echo "$lower" | grep -qE 'https'; then echo "HTTPS"; return; fi
-            if echo "$lower" | grep -qE 'http'; then echo "HTTP"; return; fi
+            # 3. Loose filename match (e.g. http_proxies.txt, HTTPS_RAW.txt, socks5-proxies.txt)
+            if echo "$pathquery" | grep -qE 'socks5'; then echo "SOCKS5"; return; fi
+            if echo "$pathquery" | grep -qE 'socks4'; then echo "SOCKS4"; return; fi
+            if echo "$pathquery" | grep -qE 'https';  then echo "HTTPS";  return; fi
+            if echo "$pathquery" | grep -qE 'http';   then echo "HTTP";   return; fi
 
             echo "—"
           }
@@ -116,16 +114,12 @@ jobs:
           while IFS='|' read -r url status online; do
             host=$(echo "$url" | sed -E 's|https?://||; s|/.*||')
             path=$(echo "$url" | sed -E 's|https?://[^/]+/||; s|[?].*||')
-            short_path=$(basename "$path" 2>/dev/null || echo "$path")
 
-            if [ -z "$short_path" ] || [ "$short_path" = "$path" ] || [ "$short_path" = "/" ]; then
-              label="$host"
+            if echo "$host" | grep -q 'raw.githubusercontent.com'; then
+              repo=$(echo "$path" | cut -d'/' -f1)
+              [ -n "$repo" ] && label="$host/$repo" || label="$host"
             else
               label="$host"
-              if echo "$host" | grep -q 'raw.githubusercontent.com'; then
-                repo=$(echo "$path" | cut -d'/' -f1)
-                [ -n "$repo" ] && label="$host/$repo"
-              fi
             fi
 
             # Keep labels reasonably short for table readability
