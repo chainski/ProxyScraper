@@ -1,6 +1,6 @@
 # ProxyScraper Source Status
 
-**Last checked:** 2026-11-09 02:18:22 UTC  
+**Last checked:** 2026-11-09 02:25:40 UTC  
 **Online sources:** 100 / 100
 
 ## Details
@@ -27,7 +27,7 @@
 | [raw.githubusercontent.com/6yyn](https://raw.githubusercontent.com/6yyn/free-proxy-list/main/http.txt) | HTTP | 200 | YES |
 | [raw.githubusercontent.com/ALIILAPRO](https://raw.githubusercontent.com/ALIILAPRO/Proxy/main/socks5.txt) | SOCKS5 | 200 | YES |
 | [raw.githubusercontent.com/Anonym0usWork1221](https://raw.githubusercontent.com/Anonym0usWork1221/Free-Proxies/main/proxy_files/socks4_proxies.txt) | SOCKS4 | 200 | YES |
-| [raw.githubusercontent.com/Bes-js](https://raw.githubusercontent.com/Bes-js/public-proxy-list/main/proxies.txt) | — | 200 | YES |
+| [raw.githubusercontent.com/Argh94](https://raw.githubusercontent.com/Argh94/Proxy-List/main/HTTP.txt) | HTTP | 200 | YES |
 | [raw.githubusercontent.com/EDT-Pages](https://raw.githubusercontent.com/EDT-Pages/Proxy-List/main/data/http.json) | HTTP | 200 | YES |
 | [raw.githubusercontent.com/EDT-Pages](https://raw.githubusercontent.com/EDT-Pages/Proxy-List/main/data/socks5.json) | SOCKS5 | 200 | YES |
 | [raw.githubusercontent.com/ErcinDedeoglu](https://raw.githubusercontent.com/ErcinDedeoglu/proxies/main/proxies/http.txt) | HTTP | 200 | YES |
