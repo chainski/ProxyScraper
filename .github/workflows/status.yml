@@ -23,6 +23,7 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
       - name: Extract source URLs from ProxyScraper.cpp
         id: extract
         run: |
@@ -70,12 +71,47 @@ jobs:
             echo
             echo "## Details"
             echo
-            echo "| Source | HTTP Status | Online |"
-            echo "|--------|-------------|--------|"
+            echo "| Source | Protocol | HTTP Status | Online |"
+            echo "|--------|----------|-------------|--------|"
           } > STATUS.md
 
-
+          # Sort alphabetically by URL for stable, readable output
           sort -t'|' -k1,1 status_results.txt > status_sorted.txt
+
+          # Helper: detect protocol from URL (path + query)
+          detect_protocol() {
+            local url="$1"
+            local lower
+            lower=$(echo "$url" | tr '[:upper:]' '[:lower:]')
+
+            # Query parameter style: protocol=socks5 or protocols=http,https
+            if echo "$lower" | grep -qE '[?&]protocol(s)?='; then
+              local proto
+              proto=$(echo "$lower" | sed -nE 's/.*[?&]protocol(s)?=([^&]+).*/\2/p' | cut -d',' -f1 | cut -d'%' -f1)
+              case "$proto" in
+                http)  echo "HTTP"; return ;;
+                https) echo "HTTPS"; return ;;
+                socks4) echo "SOCKS4"; return ;;
+                socks5) echo "SOCKS5"; return ;;
+              esac
+            fi
+
+            # Path / filename style
+            if echo "$lower" | grep -qE '(^|/)(http|https|socks4|socks5)([^a-z0-9]|$)'; then
+              if echo "$lower" | grep -qE '(^|/)socks5([^a-z0-9]|$)'; then echo "SOCKS5"; return; fi
+              if echo "$lower" | grep -qE '(^|/)socks4([^a-z0-9]|$)'; then echo "SOCKS4"; return; fi
+              if echo "$lower" | grep -qE '(^|/)https([^a-z0-9]|$)'; then echo "HTTPS"; return; fi
+              if echo "$lower" | grep -qE '(^|/)http([^a-z0-9]|$)'; then echo "HTTP"; return; fi
+            fi
+
+            # Filename contains the word (e.g. http_proxies.txt, HTTPS_RAW.txt, socks5-proxies.txt)
+            if echo "$lower" | grep -qE 'socks5'; then echo "SOCKS5"; return; fi
+            if echo "$lower" | grep -qE 'socks4'; then echo "SOCKS4"; return; fi
+            if echo "$lower" | grep -qE 'https'; then echo "HTTPS"; return; fi
+            if echo "$lower" | grep -qE 'http'; then echo "HTTP"; return; fi
+
+            echo "—"
+          }
 
           while IFS='|' read -r url status online; do
             host=$(echo "$url" | sed -E 's|https?://||; s|/.*||')
@@ -85,16 +121,24 @@ jobs:
             if [ -z "$short_path" ] || [ "$short_path" = "$path" ] || [ "$short_path" = "/" ]; then
               label="$host"
             else
-              label="$host/$short_path"
+              label="$host"
+              if echo "$host" | grep -q 'raw.githubusercontent.com'; then
+                repo=$(echo "$path" | cut -d'/' -f1)
+                [ -n "$repo" ] && label="$host/$repo"
+              fi
             fi
 
-            if [ ${#label} -gt 55 ]; then
-              label="${label:0:52}..."
+            # Keep labels reasonably short for table readability
+            if [ ${#label} -gt 50 ]; then
+              label="${label:0:47}..."
             fi
 
+            # Escape any pipe characters (rare)
             label=${label//|/\|}
 
-            echo "| [$label]($url) | $status | $online |" >> STATUS.md
+            protocol=$(detect_protocol "$url")
+
+            echo "| [$label]($url) | $protocol | $status | $online |" >> STATUS.md
           done < status_sorted.txt
 
           echo "" >> STATUS.md
